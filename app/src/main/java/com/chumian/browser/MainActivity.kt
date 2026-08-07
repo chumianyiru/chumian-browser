@@ -85,6 +85,7 @@ fun BrowserScreen() {
     val isSecure = currentUrl.startsWith("https://")
     var showFindBar by remember { mutableStateOf(false) }
     var findQuery by remember { mutableStateOf("") }
+    var isIncognito by remember { mutableStateOf(false) }
 
     LaunchedEffect(currentUrl) {
         isBookmarked = bookmarkManager.isBookmarked(currentUrl)
@@ -94,6 +95,35 @@ fun BrowserScreen() {
         modifier = Modifier.fillMaxSize()
     ) {
         if (currentScreen is Screen.Browser) {
+            // 无痕模式指示器
+            if (isIncognito) {
+                Surface(
+                    modifier = Modifier.fillMaxWidth(),
+                    color = MaterialTheme.colorScheme.secondaryContainer
+                ) {
+                    Row(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(horizontal = 16.dp, vertical = 4.dp),
+                        horizontalArrangement = Arrangement.Center,
+                        verticalAlignment = androidx.compose.ui.Alignment.CenterVertically
+                    ) {
+                        Icon(
+                            imageVector = Icons.Default.VisibilityOff,
+                            contentDescription = null,
+                            modifier = Modifier.size(16.dp),
+                            tint = MaterialTheme.colorScheme.onSecondaryContainer
+                        )
+                        Spacer(modifier = Modifier.width(8.dp))
+                        Text(
+                            text = "无痕浏览模式",
+                            style = MaterialTheme.typography.labelSmall,
+                            color = MaterialTheme.colorScheme.onSecondaryContainer
+                        )
+                    }
+                }
+            }
+
             // 地址栏
             Row(
                 modifier = Modifier
@@ -201,6 +231,17 @@ fun BrowserScreen() {
                             }
                         )
                         DropdownMenuItem(
+                            text = { Text(if (isIncognito) "退出无痕模式" else "无痕浏览") },
+                            onClick = {
+                                showMenu = false
+                                isIncognito = !isIncognito
+                                if (isIncognito) {
+                                    // 进入无痕模式时清除历史记录状态
+                                    webView?.clearHistory()
+                                }
+                            }
+                        )
+                        DropdownMenuItem(
                             text = { Text("页面内查找") },
                             onClick = {
                                 showMenu = false
@@ -291,9 +332,11 @@ fun BrowserScreen() {
                                     canGoBack = view?.canGoBack() ?: false
                                     canGoForward = view?.canGoForward() ?: false
                                     currentTitle = view?.title ?: ""
-                                    // 添加到历史记录
-                                    pageUrl?.let {
-                                        historyManager.addHistory(it, currentTitle)
+                                    // 添加到历史记录（无痕模式下不记录）
+                                    if (!isIncognito) {
+                                        pageUrl?.let {
+                                            historyManager.addHistory(it, currentTitle)
+                                        }
                                     }
                                 }
                             }
