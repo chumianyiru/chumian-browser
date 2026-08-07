@@ -4,6 +4,7 @@ import android.Manifest
 import android.content.Intent
 import android.os.Build
 import android.os.Bundle
+import android.view.WindowManager
 import android.webkit.CookieManager
 import android.webkit.DownloadListener
 import android.webkit.WebView
@@ -89,6 +90,7 @@ fun BrowserScreen() {
     var findQuery by remember { mutableStateOf("") }
     var isIncognito by remember { mutableStateOf(false) }
     var isDesktopMode by remember { mutableStateOf(false) }
+    var isFullscreen by remember { mutableStateOf(false) }
 
     LaunchedEffect(currentUrl) {
         isBookmarked = bookmarkManager.isBookmarked(currentUrl)
@@ -276,6 +278,19 @@ fun BrowserScreen() {
                                     putExtra(Intent.EXTRA_TEXT, "$currentTitle\n$currentUrl")
                                 }
                                 context.startActivity(Intent.createChooser(shareIntent, "分享网页"))
+                            }
+                        )
+                        DropdownMenuItem(
+                            text = { Text(if (isFullscreen) "退出全屏" else "全屏浏览") },
+                            onClick = {
+                                showMenu = false
+                                isFullscreen = !isFullscreen
+                                val activity = context as? android.app.Activity
+                                if (isFullscreen) {
+                                    activity?.window?.addFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN)
+                                } else {
+                                    activity?.window?.clearFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN)
+                                }
                             }
                         )
                         DropdownMenuItem(
