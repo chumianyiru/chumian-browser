@@ -424,7 +424,7 @@ fun BrowserScreen() {
                         }
                     },
                     update = { view ->
-                        webView = view
+                        webView = view as? WebView
                     },
                     modifier = Modifier.fillMaxSize()
                 )
