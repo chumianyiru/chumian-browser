@@ -4,6 +4,7 @@ import android.Manifest
 import android.content.Intent
 import android.os.Build
 import android.os.Bundle
+import android.webkit.CookieManager
 import android.webkit.DownloadListener
 import android.webkit.WebView
 import android.webkit.WebViewClient
@@ -275,6 +276,14 @@ fun BrowserScreen() {
                                     putExtra(Intent.EXTRA_TEXT, "$currentTitle\n$currentUrl")
                                 }
                                 context.startActivity(Intent.createChooser(shareIntent, "分享网页"))
+                            }
+                        )
+                        DropdownMenuItem(
+                            text = { Text("清除缓存") },
+                            onClick = {
+                                showMenu = false
+                                webView?.clearCache(true)
+                                CookieManager.getInstance().removeAllCookies(null)
                             }
                         )
                     }
