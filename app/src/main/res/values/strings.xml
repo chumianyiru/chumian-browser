@@ -960,7 +960,7 @@
     <string name="module_post">模块POST</string>
     <string name="module_put">模块PUT</string>
     <string name="module_delete">模块DELETE</string>
-    <string name="module_patch">模块PATCH</string>
+    <string name="module_patch_method">模块PATCH</string>
     <string name="module_head">模块HEAD</string>
     <string name="module_options">模块OPTIONS</string>
     <string name="module_trace">模块TRACE</string>
@@ -1278,7 +1278,7 @@
     <string name="module_jfet">模块JFET</string>
     <string name="module_op_amp">模块运算放大器</string>
     <string name="module_comparator">模块比较器</string>
-    <string name="module_timer">模块定时器</string>
+    <string name="module_timer_task">模块定时器</string>
     <string name="module_counter">模块计数器</string>
     <string name="module_register">模块寄存器</string>
     <string name="module_memory_chip">模块存储芯片</string>
@@ -1314,7 +1314,7 @@
     <string name="module_miniled">模块MiniLED</string>
     <string name="module_lcd">模块LCD</string>
     <string name="module_tft">模块TFT</string>
-    <string name="module_ips">模块IPS</string>
+    <string name="module_ips_protocol">模块IPS</string>
     <string name="module_va">模块VA</string>
     <string name="module_tn">模块TN</string>
     <string name="module_oled_display">模块OLED显示</string>
