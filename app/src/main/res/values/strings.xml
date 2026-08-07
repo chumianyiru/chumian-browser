@@ -793,7 +793,7 @@
     <string name="module_data_visualization">模块数据可视化</string>
     <string name="module_data_mining">模块数据挖掘</string>
     <string name="module_big_data">模块大数据</string>
-    <string name="module_statistics">模块统计学</string>
+    <string name="module_statistics_feature">模块统计学</string>
     <string name="module_probability">模块概率论</string>
     <string name="module_mathematics">模块数学</string>
     <string name="module_algebra">模块代数</string>
