@@ -7,15 +7,16 @@ import android.os.Build
 import com.chumian.browser.bookmark.BookmarkManager
 import com.chumian.browser.download.DownloadManager
 import com.chumian.browser.history.HistoryManager
+import com.chumian.browser.settings.SettingsManager
 
 class ChumianApp : Application() {
     lateinit var bookmarkManager: BookmarkManager
         private set
-
     lateinit var historyManager: HistoryManager
         private set
-
     lateinit var downloadManager: DownloadManager
+        private set
+    lateinit var settingsManager: SettingsManager
         private set
 
     override fun onCreate() {
@@ -24,6 +25,7 @@ class ChumianApp : Application() {
         bookmarkManager = BookmarkManager(this)
         historyManager = HistoryManager(this)
         downloadManager = DownloadManager(this)
+        settingsManager = SettingsManager(this)
         createNotificationChannels()
     }
 
@@ -36,7 +38,6 @@ class ChumianApp : Application() {
             ).apply {
                 description = "下载进度通知"
             }
-
             val notificationManager = getSystemService(NotificationManager::class.java)
             notificationManager.createNotificationChannel(downloadChannel)
         }
@@ -45,7 +46,6 @@ class ChumianApp : Application() {
     companion object {
         lateinit var instance: ChumianApp
             private set
-
         const val CHANNEL_DOWNLOAD = "download_channel"
     }
 }

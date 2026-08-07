@@ -80,6 +80,7 @@ fun BrowserScreen() {
     val bookmarkManager = ChumianApp.instance.bookmarkManager
     val historyManager = ChumianApp.instance.historyManager
     val downloadManager = ChumianApp.instance.downloadManager
+    val settingsManager = ChumianApp.instance.settingsManager
     var isBookmarked by remember { mutableStateOf(false) }
     var sourceCode by remember { mutableStateOf("") }
     val isSecure = currentUrl.startsWith("https://")
@@ -167,7 +168,7 @@ fun BrowserScreen() {
                             val searchUrl = if (url.startsWith("http://") || url.startsWith("https://")) {
                                 url
                             } else {
-                                "https://www.baidu.com/s?wd=$url"
+                                settingsManager.getSearchUrl(url)
                             }
                             webView?.loadUrl(searchUrl)
                         }
@@ -390,6 +391,7 @@ fun BrowserScreen() {
             )
         } else if (currentScreen is Screen.Settings) {
             SettingsScreen(
+                settingsManager = settingsManager,
                 onBack = { currentScreen = Screen.Browser }
             )
         } else if (currentScreen is Screen.ViewSource) {

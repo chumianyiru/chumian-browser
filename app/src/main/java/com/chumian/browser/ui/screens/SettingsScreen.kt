@@ -12,6 +12,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.unit.dp
+import com.chumian.browser.settings.SettingsManager
 
 data class SettingItem(
     val title: String,
@@ -23,37 +24,49 @@ data class SettingItem(
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun SettingsScreen(
+    settingsManager: SettingsManager,
     onBack: () -> Unit
 ) {
-    val settings = remember {
-        listOf(
-            SettingItem(
-                title = "搜索引擎",
-                description = "百度",
-                icon = Icons.Default.Search
-            ),
-            SettingItem(
-                title = "主题",
-                description = "跟随系统",
-                icon = Icons.Default.Palette
-            ),
-            SettingItem(
-                title = "字体大小",
-                description = "默认",
-                icon = Icons.Default.FormatSize
-            ),
-            SettingItem(
-                title = "隐私设置",
-                description = "清除缓存、Cookie等",
-                icon = Icons.Default.Security
-            ),
-            SettingItem(
-                title = "关于",
-                description = "初眠浏览器 v1.0.0",
-                icon = Icons.Default.Info
-            )
+    var showSearchEngineDialog by remember { mutableStateOf(false) }
+    var showThemeDialog by remember { mutableStateOf(false) }
+    var showFontSizeDialog by remember { mutableStateOf(false) }
+    var showClearDataDialog by remember { mutableStateOf(false) }
+
+    val searchEngineName = remember { settingsManager.getSearchEngineName() }
+    val themeName = remember { settingsManager.getThemeName() }
+    val fontSizeName = remember { settingsManager.getFontSizeName() }
+
+    val settings = listOf(
+        SettingItem(
+            title = "搜索引擎",
+            description = searchEngineName,
+            icon = Icons.Default.Search,
+            onClick = { showSearchEngineDialog = true }
+        ),
+        SettingItem(
+            title = "主题",
+            description = themeName,
+            icon = Icons.Default.Palette,
+            onClick = { showThemeDialog = true }
+        ),
+        SettingItem(
+            title = "字体大小",
+            description = fontSizeName,
+            icon = Icons.Default.FormatSize,
+            onClick = { showFontSizeDialog = true }
+        ),
+        SettingItem(
+            title = "隐私设置",
+            description = "清除缓存、Cookie等",
+            icon = Icons.Default.Security,
+            onClick = { showClearDataDialog = true }
+        ),
+        SettingItem(
+            title = "关于",
+            description = "初眠浏览器 v1.0.0",
+            icon = Icons.Default.Info
         )
-    }
+    )
 
     Column(
         modifier = Modifier.fillMaxSize()
@@ -80,6 +93,169 @@ fun SettingsScreen(
                 Divider()
             }
         }
+    }
+
+    // 搜索引擎选择对话框
+    if (showSearchEngineDialog) {
+        AlertDialog(
+            onDismissRequest = { showSearchEngineDialog = false },
+            title = { Text("选择搜索引擎") },
+            text = {
+                Column {
+                    listOf(
+                        "baidu" to "百度",
+                        "google" to "Google",
+                        "bing" to "必应",
+                        "sogou" to "搜狗",
+                        "360" to "360搜索"
+                    ).forEach { (value, name) ->
+                        Row(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .clickable {
+                                    settingsManager.searchEngine = value
+                                    showSearchEngineDialog = false
+                                }
+                                .padding(vertical = 12.dp),
+                            verticalAlignment = Alignment.CenterVertically
+                        ) {
+                            RadioButton(
+                                selected = settingsManager.searchEngine == value,
+                                onClick = {
+                                    settingsManager.searchEngine = value
+                                    showSearchEngineDialog = false
+                                }
+                            )
+                            Spacer(modifier = Modifier.width(16.dp))
+                            Text(name)
+                        }
+                    }
+                }
+            },
+            confirmButton = {
+                TextButton(onClick = { showSearchEngineDialog = false }) {
+                    Text("取消")
+                }
+            }
+        )
+    }
+
+    // 主题选择对话框
+    if (showThemeDialog) {
+        AlertDialog(
+            onDismissRequest = { showThemeDialog = false },
+            title = { Text("选择主题") },
+            text = {
+                Column {
+                    listOf(
+                        "system" to "跟随系统",
+                        "light" to "浅色",
+                        "dark" to "深色"
+                    ).forEach { (value, name) ->
+                        Row(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .clickable {
+                                    settingsManager.themeMode = value
+                                    showThemeDialog = false
+                                }
+                                .padding(vertical = 12.dp),
+                            verticalAlignment = Alignment.CenterVertically
+                        ) {
+                            RadioButton(
+                                selected = settingsManager.themeMode == value,
+                                onClick = {
+                                    settingsManager.themeMode = value
+                                    showThemeDialog = false
+                                }
+                            )
+                            Spacer(modifier = Modifier.width(16.dp))
+                            Text(name)
+                        }
+                    }
+                }
+            },
+            confirmButton = {
+                TextButton(onClick = { showThemeDialog = false }) {
+                    Text("取消")
+                }
+            }
+        )
+    }
+
+    // 字体大小选择对话框
+    if (showFontSizeDialog) {
+        AlertDialog(
+            onDismissRequest = { showFontSizeDialog = false },
+            title = { Text("选择字体大小") },
+            text = {
+                Column {
+                    listOf(
+                        75 to "较小",
+                        100 to "默认",
+                        125 to "较大",
+                        150 to "大"
+                    ).forEach { (value, name) ->
+                        Row(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .clickable {
+                                    settingsManager.fontSize = value
+                                    showFontSizeDialog = false
+                                }
+                                .padding(vertical = 12.dp),
+                            verticalAlignment = Alignment.CenterVertically
+                        ) {
+                            RadioButton(
+                                selected = settingsManager.fontSize == value,
+                                onClick = {
+                                    settingsManager.fontSize = value
+                                    showFontSizeDialog = false
+                                }
+                            )
+                            Spacer(modifier = Modifier.width(16.dp))
+                            Text(name)
+                        }
+                    }
+                }
+            },
+            confirmButton = {
+                TextButton(onClick = { showFontSizeDialog = false }) {
+                    Text("取消")
+                }
+            }
+        )
+    }
+
+    // 清除数据对话框
+    if (showClearDataDialog) {
+        AlertDialog(
+            onDismissRequest = { showClearDataDialog = false },
+            title = { Text("隐私设置") },
+            text = {
+                Column {
+                    Text("清除浏览数据：")
+                    Spacer(modifier = Modifier.height(8.dp))
+                    Text("• 清除缓存")
+                    Text("• 清除Cookie")
+                    Text("• 清除历史记录")
+                }
+            },
+            confirmButton = {
+                TextButton(
+                    onClick = {
+                        showClearDataDialog = false
+                    }
+                ) {
+                    Text("清除", color = MaterialTheme.colorScheme.error)
+                }
+            },
+            dismissButton = {
+                TextButton(onClick = { showClearDataDialog = false }) {
+                    Text("取消")
+                }
+            }
+        )
     }
 }
 
