@@ -17,11 +17,10 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.viewinterop.AndroidView
-import com.chumian.browser.ui.screens.BookmarksScreen
-import com.chumian.browser.ui.screens.DownloadsScreen
-import com.chumian.browser.ui.screens.HistoryScreen
-import com.chumian.browser.ui.screens.SettingsScreen
+import com.chumian.browser.ui.screens.*
 import com.chumian.browser.ui.theme.ChumianBrowserTheme
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 
 class MainActivity : ComponentActivity() {
     private val permissionLauncher = registerForActivityResult(
@@ -62,6 +61,7 @@ sealed class Screen {
     object History : Screen()
     object Downloads : Screen()
     object Settings : Screen()
+    object ViewSource : Screen()
 }
 
 @Composable
@@ -79,6 +79,8 @@ fun BrowserScreen() {
     val historyManager = ChumianApp.instance.historyManager
     val downloadManager = ChumianApp.instance.downloadManager
     var isBookmarked by remember { mutableStateOf(false) }
+    var sourceCode by remember { mutableStateOf("") }
+    val coroutineScope = rememberCoroutineScope()
 
     LaunchedEffect(currentUrl) {
         isBookmarked = bookmarkManager.isBookmarked(currentUrl)
@@ -172,6 +174,20 @@ fun BrowserScreen() {
                                 }
                                 isBookmarked = !isBookmarked
                                 showMenu = false
+                            }
+                        )
+                        DropdownMenuItem(
+                            text = { Text("查看源码") },
+                            onClick = {
+                                showMenu = false
+                                sourceCode = ""
+                                currentScreen = Screen.ViewSource
+                                // 获取网页源码
+                                webView?.evaluateJavascript(
+                                    "document.documentElement.outerHTML"
+                                ) { result ->
+                                    sourceCode = result?.trim('"')?.replace("\\n", "\n")?.replace("\\t", "\t") ?: ""
+                                }
                             }
                         )
                         DropdownMenuItem(
@@ -273,6 +289,11 @@ fun BrowserScreen() {
             )
         } else if (currentScreen is Screen.Settings) {
             SettingsScreen(
+                onBack = { currentScreen = Screen.Browser }
+            )
+        } else if (currentScreen is Screen.ViewSource) {
+            ViewSourceScreen(
+                sourceCode = sourceCode,
                 onBack = { currentScreen = Screen.Browser }
             )
         }
