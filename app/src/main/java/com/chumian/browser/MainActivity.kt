@@ -87,6 +87,7 @@ fun BrowserScreen() {
     var showFindBar by remember { mutableStateOf(false) }
     var findQuery by remember { mutableStateOf("") }
     var isIncognito by remember { mutableStateOf(false) }
+    var isDesktopMode by remember { mutableStateOf(false) }
 
     LaunchedEffect(currentUrl) {
         isBookmarked = bookmarkManager.isBookmarked(currentUrl)
@@ -229,6 +230,21 @@ fun BrowserScreen() {
                                 ) { result ->
                                     sourceCode = result?.trim('"')?.replace("\\n", "\n")?.replace("\\t", "\t") ?: ""
                                 }
+                            }
+                        )
+                        DropdownMenuItem(
+                            text = { Text(if (isDesktopMode) "移动版页面" else "桌面版页面") },
+                            onClick = {
+                                showMenu = false
+                                isDesktopMode = !isDesktopMode
+                                webView?.settings?.userAgentString = if (isDesktopMode) {
+                                    "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36"
+                                } else {
+                                    null
+                                }
+                                webView?.settings?.useWideViewPort = isDesktopMode
+                                webView?.settings?.loadWithOverviewMode = isDesktopMode
+                                webView?.reload()
                             }
                         )
                         DropdownMenuItem(
