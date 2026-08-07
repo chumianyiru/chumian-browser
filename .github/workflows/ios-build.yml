@@ -32,7 +32,7 @@ jobs:
           cd ios
           xcodegen generate
       
-      - name: List schemes
+      - name: List project info
         run: |
           cd ios
           xcodebuild -list -project ChumianBrowser.xcodeproj
@@ -42,24 +42,23 @@ jobs:
           cd ios
           xcodebuild build \
             -project ChumianBrowser.xcodeproj \
-            -target ChumianBrowser \
+            -scheme ChumianBrowser \
             -destination 'platform=iOS Simulator,name=iPhone 17' \
-            -derivedDataPath build \
             CODE_SIGN_IDENTITY="" \
             CODE_SIGNING_REQUIRED=NO \
             CODE_SIGNING_ALLOWED=NO \
             ONLY_ACTIVE_ARCH=YES
       
-      - name: Package .app
+      - name: Find and package .app
         run: |
-          cd ios/build/Build/Products/Debug-iphonesimulator
-          zip -r ChumianBrowser-simulator.zip ChumianBrowser.app
+          cd ios
+          find ~/Library/Developer/Xcode/DerivedData -name "ChumianBrowser.app" -type d -path "*/Debug-iphonesimulator/*" | head -1 | xargs -I {} dirname {} | xargs -I {} sh -c 'cd "{}" && zip -r /tmp/ChumianBrowser-simulator.zip ChumianBrowser.app'
       
       - name: Upload Artifact
         uses: actions/upload-artifact@v4
         with:
           name: chumian-browser-ios-simulator
-          path: ios/build/Build/Products/Debug-iphonesimulator/ChumianBrowser-simulator.zip
+          path: /tmp/ChumianBrowser-simulator.zip
           retention-days: 90
       
       - name: Build for Generic iOS Device
@@ -67,22 +66,21 @@ jobs:
           cd ios
           xcodebuild build \
             -project ChumianBrowser.xcodeproj \
-            -target ChumianBrowser \
+            -scheme ChumianBrowser \
             -destination 'generic/platform=iOS' \
-            -derivedDataPath build-device \
             CODE_SIGN_IDENTITY="" \
             CODE_SIGNING_REQUIRED=NO \
             CODE_SIGNING_ALLOWED=NO \
             ONLY_ACTIVE_ARCH=NO
       
-      - name: Package Device .app
+      - name: Find and package Device .app
         run: |
-          cd ios/build-device/Build/Products/Debug-iphoneos
-          zip -r Chumian-browser-device.zip ChumianBrowser.app
+          cd ios
+          find ~/Library/Developer/Xcode/DerivedData -name "ChumianBrowser.app" -type d -path "*/Debug-iphoneos/*" | head -1 | xargs -I {} dirname {} | xargs -I {} sh -c 'cd "{}" && zip -r /tmp/Chumian-browser-device.zip ChumianBrowser.app'
       
       - name: Upload Device Artifact
         uses: actions/upload-artifact@v4
         with:
           name: chumian-browser-ios-device
-          path: ios/build-device/Build/Products/Debug-iphoneos/Chumian-browser-device.zip
+          path: /tmp/Chumian-browser-device.zip
           retention-days: 90
