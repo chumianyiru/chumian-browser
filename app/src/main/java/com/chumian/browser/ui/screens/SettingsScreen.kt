@@ -20,6 +20,7 @@ data class SettingItem(
     val onClick: () -> Unit = {}
 )
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun SettingsScreen(
     onBack: () -> Unit
@@ -76,7 +77,7 @@ fun SettingsScreen(
                     item = setting,
                     onClick = setting.onClick
                 )
-                HorizontalDivider()
+                Divider()
             }
         }
     }

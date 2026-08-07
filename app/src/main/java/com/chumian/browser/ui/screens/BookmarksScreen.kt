@@ -15,6 +15,7 @@ import androidx.compose.ui.unit.dp
 import com.chumian.browser.bookmark.BookmarkManager
 import com.chumian.browser.data.model.Bookmark
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun BookmarksScreen(
     bookmarkManager: BookmarkManager,
@@ -73,7 +74,7 @@ fun BookmarksScreen(
                             bookmarks = bookmarkManager.getBookmarks()
                         }
                     )
-                    HorizontalDivider()
+                    Divider()
                 }
             }
         }
