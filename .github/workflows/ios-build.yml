@@ -32,17 +32,21 @@ jobs:
           cd ios
           xcodegen generate
       
+      - name: List available simulators
+        run: xcrun simctl list devices available
+      
       - name: Build for Simulator
         run: |
           cd ios
           xcodebuild build \
             -scheme ChumianBrowser \
-            -destination 'platform=iOS Simulator,name=iPhone 15' \
+            -destination 'platform=iOS Simulator,name=Any iOS Simulator Device' \
             -derivedDataPath build \
             CODE_SIGN_IDENTITY="" \
             CODE_SIGNING_REQUIRED=NO \
             CODE_SIGNING_ALLOWED=NO \
-            ONLY_ACTIVE_ARCH=YES
+            ONLY_ACTIVE_ARCH=YES \
+            -quiet
       
       - name: Package .app
         run: |
@@ -66,7 +70,8 @@ jobs:
             CODE_SIGN_IDENTITY="" \
             CODE_SIGNING_REQUIRED=NO \
             CODE_SIGNING_ALLOWED=NO \
-            ONLY_ACTIVE_ARCH=NO
+            ONLY_ACTIVE_ARCH=NO \
+            -quiet
       
       - name: Package Device .app
         run: |
