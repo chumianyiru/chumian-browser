@@ -15,6 +15,7 @@ import androidx.compose.material.icons.filled.*
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.unit.dp
 import androidx.compose.ui.viewinterop.AndroidView
 import com.chumian.browser.ui.theme.ChumianBrowserTheme
 
@@ -166,17 +167,17 @@ fun BrowserScreen() {
                 factory = { context ->
                     WebView(context).apply {
                         webViewClient = object : WebViewClient() {
-                            override fun onPageStarted(view: WebView?, url: String?, favicon: android.graphics.Bitmap?) {
+                            override fun onPageStarted(view: WebView?, pageUrl: String?, favicon: android.graphics.Bitmap?) {
                                 isLoading = true
-                                url?.let {
+                                pageUrl?.let {
                                     currentUrl = it
-                                    this@BrowserScreen.url = it
+                                    url = it
                                 }
                                 canGoBack = view?.canGoBack() ?: false
                                 canGoForward = view?.canGoForward() ?: false
                             }
 
-                            override fun onPageFinished(view: WebView?, url: String?) {
+                            override fun onPageFinished(view: WebView?, pageUrl: String?) {
                                 isLoading = false
                                 canGoBack = view?.canGoBack() ?: false
                                 canGoForward = view?.canGoForward() ?: false
