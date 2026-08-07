@@ -83,6 +83,8 @@ fun BrowserScreen() {
     var isBookmarked by remember { mutableStateOf(false) }
     var sourceCode by remember { mutableStateOf("") }
     val isSecure = currentUrl.startsWith("https://")
+    var showFindBar by remember { mutableStateOf(false) }
+    var findQuery by remember { mutableStateOf("") }
 
     LaunchedEffect(currentUrl) {
         isBookmarked = bookmarkManager.isBookmarked(currentUrl)
@@ -199,6 +201,13 @@ fun BrowserScreen() {
                             }
                         )
                         DropdownMenuItem(
+                            text = { Text("页面内查找") },
+                            onClick = {
+                                showMenu = false
+                                showFindBar = !showFindBar
+                            }
+                        )
+                        DropdownMenuItem(
                             text = { Text("分享") },
                             onClick = {
                                 showMenu = false
@@ -220,6 +229,41 @@ fun BrowserScreen() {
                     modifier = Modifier.fillMaxWidth(),
                     color = MaterialTheme.colorScheme.primary
                 )
+            }
+
+            // 查找栏
+            if (showFindBar) {
+                Row(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(horizontal = 8.dp, vertical = 4.dp),
+                    horizontalArrangement = Arrangement.spacedBy(8.dp),
+                    verticalAlignment = androidx.compose.ui.Alignment.CenterVertically
+                ) {
+                    OutlinedTextField(
+                        value = findQuery,
+                        onValueChange = {
+                            findQuery = it
+                            webView?.findAllAsync(it)
+                        },
+                        modifier = Modifier.weight(1f),
+                        singleLine = true,
+                        placeholder = { Text("在页面中查找") }
+                    )
+                    IconButton(onClick = { webView?.findNext(false) }) {
+                        Icon(Icons.Default.KeyboardArrowUp, contentDescription = "上一个")
+                    }
+                    IconButton(onClick = { webView?.findNext(true) }) {
+                        Icon(Icons.Default.KeyboardArrowDown, contentDescription = "下一个")
+                    }
+                    IconButton(onClick = {
+                        showFindBar = false
+                        findQuery = ""
+                        webView?.clearMatches()
+                    }) {
+                        Icon(Icons.Default.Close, contentDescription = "关闭")
+                    }
+                }
             }
 
             // WebView
