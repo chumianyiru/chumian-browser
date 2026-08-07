@@ -67,8 +67,3 @@ targets:
           NSAllowsArbitraryLoads: true
         UIFileSharingEnabled: true
         LSSupportsOpeningDocumentsInPlace: true
-    scheme:
-      configVariants:
-        - Debug
-        - Release
-      testTargets: []
