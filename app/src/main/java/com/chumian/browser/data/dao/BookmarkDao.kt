@@ -12,7 +12,7 @@ interface BookmarkDao {
     @Query("SELECT * FROM bookmarks WHERE isFolder = 0 ORDER BY addedTime DESC")
     fun getAllBookmarkItems(): Flow<List<Bookmark>>
     
-    @Query("SELECT * FROM bookmarks WHERE isFolder = 1 ORDER BY name")
+    @Query("SELECT * FROM bookmarks WHERE isFolder = 1 ORDER BY title")
     fun getAllFolders(): Flow<List<Bookmark>>
     
     @Query("SELECT * FROM bookmarks WHERE folderId = :folderId ORDER BY `order`")
