@@ -73,11 +73,11 @@ class DownloadManager(context: Context) {
         return if (cursor.moveToFirst()) {
             val bytesDownloadedIndex = cursor.getColumnIndex(DownloadManager.COLUMN_BYTES_DOWNLOADED_SO_FAR)
             val bytesTotalIndex = cursor.getColumnIndex(DownloadManager.COLUMN_TOTAL_SIZE_BYTES)
-            val bytesDownloaded = cursor.getLong(bytesDownloadedIndex)
-            val bytesTotal = cursor.getLong(bytesTotalIndex)
+            val bytesDownloaded: Long = cursor.getLong(bytesDownloadedIndex)
+            val bytesTotal: Long = cursor.getLong(bytesTotalIndex)
             Pair(bytesDownloaded, bytesTotal)
         } else {
-            Pair(0, 0)
+            Pair(0L, 0L)
         }.also {
             cursor.close()
         }
