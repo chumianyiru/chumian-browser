@@ -1,6 +1,7 @@
 package com.chumian.browser
 
 import android.Manifest
+import android.content.Intent
 import android.os.Build
 import android.os.Bundle
 import android.webkit.DownloadListener
@@ -15,6 +16,7 @@ import androidx.compose.material.icons.filled.*
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.viewinterop.AndroidView
 import com.chumian.browser.ui.screens.*
@@ -74,6 +76,7 @@ fun BrowserScreen() {
     var canGoForward by remember { mutableStateOf(false) }
     var showMenu by remember { mutableStateOf(false) }
     var webView: WebView? by remember { mutableStateOf(null) }
+    val context = LocalContext.current
     val bookmarkManager = ChumianApp.instance.bookmarkManager
     val historyManager = ChumianApp.instance.historyManager
     val downloadManager = ChumianApp.instance.downloadManager
@@ -199,6 +202,12 @@ fun BrowserScreen() {
                             text = { Text("分享") },
                             onClick = {
                                 showMenu = false
+                                val shareIntent = Intent(Intent.ACTION_SEND).apply {
+                                    type = "text/plain"
+                                    putExtra(Intent.EXTRA_TITLE, currentTitle)
+                                    putExtra(Intent.EXTRA_TEXT, "$currentTitle\n$currentUrl")
+                                }
+                                context.startActivity(Intent.createChooser(shareIntent, "分享网页"))
                             }
                         )
                     }
