@@ -2,14 +2,16 @@ import Foundation
 
 struct HistoryItem: Identifiable, Codable, Equatable {
     let id: UUID
-    var url: String
     var title: String
+    var url: String
     var visitTime: Date
+    var visitCount: Int
     
-    init(url: String, title: String) {
-        self.id = UUID()
-        self.url = url
+    init(id: UUID = UUID(), title: String, url: String, visitTime: Date = Date(), visitCount: Int = 1) {
+        self.id = id
         self.title = title
-        self.visitTime = Date()
+        self.url = url
+        self.visitTime = visitTime
+        self.visitCount = visitCount
     }
 }

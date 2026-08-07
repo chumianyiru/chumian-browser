@@ -2,14 +2,16 @@ import Foundation
 
 struct Bookmark: Identifiable, Codable, Equatable {
     let id: UUID
-    var url: String
     var title: String
-    var addedDate: Date
+    var url: String
+    var dateAdded: Date
+    var folder: String
     
-    init(url: String, title: String) {
-        self.id = UUID()
-        self.url = url
+    init(id: UUID = UUID(), title: String, url: String, dateAdded: Date = Date(), folder: String = "默认") {
+        self.id = id
         self.title = title
-        self.addedDate = Date()
+        self.url = url
+        self.dateAdded = dateAdded
+        self.folder = folder
     }
 }

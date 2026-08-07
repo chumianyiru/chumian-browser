@@ -1,5 +1,4 @@
 name: iOS Build
-
 on:
   push:
     branches: [ main ]
@@ -25,6 +24,14 @@ jobs:
       - name: Show Xcode version
         run: xcodebuild -version
       
+      - name: Install xcodegen
+        run: brew install xcodegen
+      
+      - name: Generate Xcode project
+        run: |
+          cd ios
+          xcodegen generate
+      
       - name: Build for Simulator
         run: |
           cd ios
@@ -34,7 +41,8 @@ jobs:
             -derivedDataPath build \
             CODE_SIGN_IDENTITY="" \
             CODE_SIGNING_REQUIRED=NO \
-            CODE_SIGNING_ALLOWED=NO
+            CODE_SIGNING_ALLOWED=NO \
+            ONLY_ACTIVE_ARCH=YES
       
       - name: Package .app
         run: |
@@ -46,4 +54,28 @@ jobs:
         with:
           name: chumian-browser-ios-simulator
           path: ios/build/Build/Products/Debug-iphonesimulator/ChumianBrowser-simulator.zip
+          retention-days: 90
+      
+      - name: Build for Generic iOS Device
+        run: |
+          cd ios
+          xcodebuild build \
+            -scheme ChumianBrowser \
+            -destination 'generic/platform=iOS' \
+            -derivedDataPath build-device \
+            CODE_SIGN_IDENTITY="" \
+            CODE_SIGNING_REQUIRED=NO \
+            CODE_SIGNING_ALLOWED=NO \
+            ONLY_ACTIVE_ARCH=NO
+      
+      - name: Package Device .app
+        run: |
+          cd ios/build-device/Build/Products/Debug-iphoneos
+          zip -r Chumian-browser-device.zip ChumianBrowser.app
+      
+      - name: Upload Device Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: chumian-browser-ios-device
+          path: ios/build-device/Build/Products/Debug-iphoneos/Chumian-browser-device.zip
           retention-days: 90

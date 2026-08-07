@@ -6,6 +6,7 @@ struct ChumianBrowserApp: App {
     @StateObject private var historyManager = HistoryManager()
     @StateObject private var downloadManager = DownloadManager()
     @StateObject private var settingsManager = SettingsManager()
+    @StateObject private var tabManager = TabManager()
     
     var body: some Scene {
         WindowGroup {
@@ -14,6 +15,7 @@ struct ChumianBrowserApp: App {
                 .environmentObject(historyManager)
                 .environmentObject(downloadManager)
                 .environmentObject(settingsManager)
+                .environmentObject(tabManager)
         }
     }
 }
