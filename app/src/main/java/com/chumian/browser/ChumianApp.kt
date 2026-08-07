@@ -4,11 +4,16 @@ import android.app.Application
 import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.os.Build
+import com.chumian.browser.bookmark.BookmarkManager
 
 class ChumianApp : Application() {
+    lateinit var bookmarkManager: BookmarkManager
+        private set
+
     override fun onCreate() {
         super.onCreate()
         instance = this
+        bookmarkManager = BookmarkManager(this)
         createNotificationChannels()
     }
 
