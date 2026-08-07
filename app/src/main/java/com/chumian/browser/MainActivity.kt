@@ -3,6 +3,7 @@ package com.chumian.browser
 import android.Manifest
 import android.os.Build
 import android.os.Bundle
+import android.webkit.DownloadListener
 import android.webkit.WebView
 import android.webkit.WebViewClient
 import androidx.activity.ComponentActivity
@@ -17,6 +18,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.viewinterop.AndroidView
 import com.chumian.browser.ui.screens.BookmarksScreen
+import com.chumian.browser.ui.screens.DownloadsScreen
 import com.chumian.browser.ui.screens.HistoryScreen
 import com.chumian.browser.ui.theme.ChumianBrowserTheme
 
@@ -74,6 +76,7 @@ fun BrowserScreen() {
     var webView: WebView? by remember { mutableStateOf(null) }
     val bookmarkManager = ChumianApp.instance.bookmarkManager
     val historyManager = ChumianApp.instance.historyManager
+    val downloadManager = ChumianApp.instance.downloadManager
     var isBookmarked by remember { mutableStateOf(false) }
 
     LaunchedEffect(currentUrl) {
@@ -219,6 +222,12 @@ fun BrowserScreen() {
                                     }
                                 }
                             }
+
+                            // 下载监听
+                            setDownloadListener(DownloadListener { url, userAgent, contentDisposition, mimeType, contentLength ->
+                                downloadManager.startDownload(url, userAgent)
+                            })
+
                             settings.javaScriptEnabled = true
                             settings.domStorageEnabled = true
                             settings.databaseEnabled = true
@@ -255,6 +264,10 @@ fun BrowserScreen() {
                     webView?.loadUrl(historyUrl)
                     currentScreen = Screen.Browser
                 },
+                onBack = { currentScreen = Screen.Browser }
+            )
+        } else if (currentScreen is Screen.Downloads) {
+            DownloadsScreen(
                 onBack = { currentScreen = Screen.Browser }
             )
         }

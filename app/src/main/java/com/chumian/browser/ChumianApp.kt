@@ -5,6 +5,7 @@ import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.os.Build
 import com.chumian.browser.bookmark.BookmarkManager
+import com.chumian.browser.download.DownloadManager
 import com.chumian.browser.history.HistoryManager
 
 class ChumianApp : Application() {
@@ -14,11 +15,15 @@ class ChumianApp : Application() {
     lateinit var historyManager: HistoryManager
         private set
 
+    lateinit var downloadManager: DownloadManager
+        private set
+
     override fun onCreate() {
         super.onCreate()
         instance = this
         bookmarkManager = BookmarkManager(this)
         historyManager = HistoryManager(this)
+        downloadManager = DownloadManager(this)
         createNotificationChannels()
     }
 
