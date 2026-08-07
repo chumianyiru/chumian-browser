@@ -97,5 +97,6 @@ class HistoryManager: ObservableObject {
             }
         }
         return grouped.sorted { $0.value.first?.visitTime ?? Date() > $1.value.first?.visitTime ?? Date() }
+            .map { (date: $0.key, items: $0.value) }
     }
 }
