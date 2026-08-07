@@ -573,7 +573,7 @@
     <string name="module_screen">模块屏幕</string>
     <string name="module_keyboard">模块键盘</string>
     <string name="module_mouse">模块鼠标</string>
-    <string name="module_touchscreen">模块触摸屏</button>
+    <string name="module_touchscreen">模块触摸屏</string>
     <string name="module_stylus">模块触控笔</string>
     <string name="module_gamepad">模块游戏手柄</string>
     <string name="module_printer">模块打印机</string>
