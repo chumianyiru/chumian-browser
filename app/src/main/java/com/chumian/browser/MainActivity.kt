@@ -19,8 +19,6 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.viewinterop.AndroidView
 import com.chumian.browser.ui.screens.*
 import com.chumian.browser.ui.theme.ChumianBrowserTheme
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.withContext
 
 class MainActivity : ComponentActivity() {
     private val permissionLauncher = registerForActivityResult(
@@ -62,6 +60,7 @@ sealed class Screen {
     object Downloads : Screen()
     object Settings : Screen()
     object ViewSource : Screen()
+    object SecurityInfo : Screen()
 }
 
 @Composable
@@ -80,7 +79,7 @@ fun BrowserScreen() {
     val downloadManager = ChumianApp.instance.downloadManager
     var isBookmarked by remember { mutableStateOf(false) }
     var sourceCode by remember { mutableStateOf("") }
-    val coroutineScope = rememberCoroutineScope()
+    val isSecure = currentUrl.startsWith("https://")
 
     LaunchedEffect(currentUrl) {
         isBookmarked = bookmarkManager.isBookmarked(currentUrl)
@@ -103,11 +102,17 @@ fun BrowserScreen() {
                     modifier = Modifier.weight(1f),
                     singleLine = true,
                     leadingIcon = {
-                        Icon(
-                            imageVector = Icons.Default.Lock,
-                            contentDescription = null,
-                            tint = MaterialTheme.colorScheme.primary
-                        )
+                        IconButton(onClick = { currentScreen = Screen.SecurityInfo }) {
+                            Icon(
+                                imageVector = if (isSecure) Icons.Default.Lock else Icons.Default.LockOpen,
+                                contentDescription = "安全信息",
+                                tint = if (isSecure) {
+                                    MaterialTheme.colorScheme.primary
+                                } else {
+                                    MaterialTheme.colorScheme.error
+                                }
+                            )
+                        }
                     },
                     trailingIcon = {
                         if (isLoading) {
@@ -294,6 +299,12 @@ fun BrowserScreen() {
         } else if (currentScreen is Screen.ViewSource) {
             ViewSourceScreen(
                 sourceCode = sourceCode,
+                onBack = { currentScreen = Screen.Browser }
+            )
+        } else if (currentScreen is Screen.SecurityInfo) {
+            SecurityInfoScreen(
+                url = currentUrl,
+                isSecure = isSecure,
                 onBack = { currentScreen = Screen.Browser }
             )
         }
