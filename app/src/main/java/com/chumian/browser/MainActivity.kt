@@ -17,6 +17,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.viewinterop.AndroidView
 import com.chumian.browser.ui.screens.BookmarksScreen
+import com.chumian.browser.ui.screens.HistoryScreen
 import com.chumian.browser.ui.theme.ChumianBrowserTheme
 
 class MainActivity : ComponentActivity() {
@@ -72,6 +73,7 @@ fun BrowserScreen() {
     var showMenu by remember { mutableStateOf(false) }
     var webView: WebView? by remember { mutableStateOf(null) }
     val bookmarkManager = ChumianApp.instance.bookmarkManager
+    val historyManager = ChumianApp.instance.historyManager
     var isBookmarked by remember { mutableStateOf(false) }
 
     LaunchedEffect(currentUrl) {
@@ -211,6 +213,10 @@ fun BrowserScreen() {
                                     canGoBack = view?.canGoBack() ?: false
                                     canGoForward = view?.canGoForward() ?: false
                                     currentTitle = view?.title ?: ""
+                                    // 添加到历史记录
+                                    pageUrl?.let {
+                                        historyManager.addHistory(it, currentTitle)
+                                    }
                                 }
                             }
                             settings.javaScriptEnabled = true
@@ -238,6 +244,15 @@ fun BrowserScreen() {
                 bookmarkManager = bookmarkManager,
                 onBookmarkClick = { bookmarkUrl ->
                     webView?.loadUrl(bookmarkUrl)
+                    currentScreen = Screen.Browser
+                },
+                onBack = { currentScreen = Screen.Browser }
+            )
+        } else if (currentScreen is Screen.History) {
+            HistoryScreen(
+                historyManager = historyManager,
+                onHistoryClick = { historyUrl ->
+                    webView?.loadUrl(historyUrl)
                     currentScreen = Screen.Browser
                 },
                 onBack = { currentScreen = Screen.Browser }
