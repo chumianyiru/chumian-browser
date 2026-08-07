@@ -356,7 +356,8 @@ fun BrowserScreen() {
             ) {
                 AndroidView(
                     factory = { context ->
-                        WebView(context).apply {
+                        try {
+                            WebView(context).apply {
                             webViewClient = object : WebViewClient() {
                                 override fun onPageStarted(view: WebView?, pageUrl: String?, favicon: android.graphics.Bitmap?) {
                                     isLoading = true
@@ -376,7 +377,11 @@ fun BrowserScreen() {
                                     // 添加到历史记录（无痕模式下不记录）
                                     if (!isIncognito) {
                                         pageUrl?.let {
-                                            historyManager.addHistory(it, currentTitle)
+                                            try {
+                                                historyManager.addHistory(it, currentTitle)
+                                            } catch (e: Exception) {
+                                                // 忽略历史记录异常
+                                            }
                                         }
                                     }
                                 }
@@ -384,21 +389,38 @@ fun BrowserScreen() {
 
                             // 下载监听
                             setDownloadListener(DownloadListener { url, userAgent, contentDisposition, mimeType, contentLength ->
-                                downloadManager.startDownload(url, userAgent)
+                                    try {
+                                        downloadManager.startDownload(url, userAgent)
+                                    } catch (e: Exception) {
+                                        // 忽略下载异常
+                                    }
                             })
 
-                            settings.javaScriptEnabled = true
-                            settings.domStorageEnabled = true
-                            settings.databaseEnabled = true
-                            settings.setSupportZoom(true)
-                            settings.builtInZoomControls = true
-                            settings.displayZoomControls = false
-                            settings.loadWithOverviewMode = true
-                            settings.useWideViewPort = true
-                            settings.javaScriptCanOpenWindowsAutomatically = true
-                            settings.setSupportMultipleWindows(true)
-                            loadUrl("https://www.baidu.com")
-                            webView = this
+                                try {
+                                    settings.javaScriptEnabled = true
+                                    settings.domStorageEnabled = true
+                                    settings.databaseEnabled = true
+                                    settings.setSupportZoom(true)
+                                    settings.builtInZoomControls = true
+                                    settings.displayZoomControls = false
+                                    settings.loadWithOverviewMode = true
+                                    settings.useWideViewPort = true
+                                    settings.javaScriptCanOpenWindowsAutomatically = true
+                                    settings.setSupportMultipleWindows(true)
+                                    settings.allowFileAccess = true
+                                    settings.allowContentAccess = true
+                                    settings.mediaPlaybackRequiresUserGesture = false
+                                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                                        settings.mixedContentMode = android.webkit.WebSettings.MIXED_CONTENT_ALWAYS_ALLOW
+                                    }
+                                } catch (e: Exception) {
+                                    // 忽略WebView设置异常
+                                }
+                                loadUrl("https://www.baidu.com")
+                                webView = this
+                            }
+                        } catch (e: Exception) {
+                            android.view.View(context)
                         }
                     },
                     update = { view ->

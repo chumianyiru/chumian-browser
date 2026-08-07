@@ -99,9 +99,16 @@ fun ChumianBrowserTheme(
     val view = LocalView.current
     if (!view.isInEditMode) {
         SideEffect {
-            val window = (view.context as Activity).window
-            window.statusBarColor = colorScheme.primary.toArgb()
-            WindowCompat.getInsetsController(window, view).isAppearanceLightStatusBars = !darkTheme
+            val context = view.context
+            if (context is Activity) {
+                val window = context.window
+                try {
+                    window.statusBarColor = colorScheme.primary.toArgb()
+                    WindowCompat.getInsetsController(window, view).isAppearanceLightStatusBars = !darkTheme
+                } catch (e: Exception) {
+                    // 忽略状态栏设置异常
+                }
+            }
         }
     }
     

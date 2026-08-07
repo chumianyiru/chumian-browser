@@ -1,0 +1,436 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>初眠浏览器 - 功能列表</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            background: #f5f5f5;
+            color: #333;
+            line-height: 1.6;
+        }
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 40px 20px;
+            text-align: center;
+            border-radius: 12px;
+            margin-bottom: 30px;
+        }
+        header h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+        }
+        header p {
+            font-size: 1.1em;
+            opacity: 0.9;
+        }
+        .version-info {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            margin-bottom: 30px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+        }
+        .version-info h2 {
+            color: #667eea;
+            margin-bottom: 15px;
+            font-size: 1.3em;
+        }
+        .info-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+        }
+        .info-item {
+            padding: 10px;
+            background: #f8f9fa;
+            border-radius: 6px;
+        }
+        .info-item .label {
+            font-size: 0.85em;
+            color: #666;
+            margin-bottom: 4px;
+        }
+        .info-item .value {
+            font-weight: 600;
+            color: #333;
+        }
+        .category {
+            background: white;
+            padding: 25px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+        }
+        .category h2 {
+            color: #667eea;
+            margin-bottom: 15px;
+            font-size: 1.4em;
+            padding-bottom: 10px;
+            border-bottom: 2px solid #e9ecef;
+        }
+        .feature-list {
+            list-style: none;
+        }
+        .feature-list li {
+            padding: 8px 0;
+            padding-left: 25px;
+            position: relative;
+            border-bottom: 1px solid #f0f0f0;
+        }
+        .feature-list li:last-child {
+            border-bottom: none;
+        }
+        .feature-list li::before {
+            content: "✓";
+            position: absolute;
+            left: 0;
+            color: #28a745;
+            font-weight: bold;
+        }
+        .feature-count {
+            display: inline-block;
+            background: #667eea;
+            color: white;
+            padding: 2px 10px;
+            border-radius: 12px;
+            font-size: 0.8em;
+            margin-left: 10px;
+            vertical-align: middle;
+        }
+        footer {
+            text-align: center;
+            padding: 30px;
+            color: #666;
+            font-size: 0.9em;
+        }
+        .tech-stack {
+            background: white;
+            padding: 25px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+        }
+        .tech-stack h2 {
+            color: #667eea;
+            margin-bottom: 15px;
+            font-size: 1.4em;
+            padding-bottom: 10px;
+            border-bottom: 2px solid #e9ecef;
+        }
+        .tech-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 15px;
+        }
+        .tech-item {
+            padding: 15px;
+            background: #f8f9fa;
+            border-radius: 6px;
+        }
+        .tech-item .tech-name {
+            font-weight: 600;
+            color: #333;
+            margin-bottom: 5px;
+        }
+        .tech-item .tech-desc {
+            font-size: 0.9em;
+            color: #666;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>初眠浏览器</h1>
+            <p>Chumian Browser - 轻量级安卓浏览器</p>
+        </header>
+
+        <div class="version-info">
+            <h2>版本信息</h2>
+            <div class="info-grid">
+                <div class="info-item">
+                    <div class="label">版本号</div>
+                    <div class="value">v1.0.0</div>
+                </div>
+                <div class="info-item">
+                    <div class="label">最低系统</div>
+                    <div class="value">Android 6.0 (API 23)</div>
+                </div>
+                <div class="info-item">
+                    <div class="label">目标系统</div>
+                    <div class="value">Android 14 (API 34)</div>
+                </div>
+                <div class="info-item">
+                    <div class="label">安装包大小</div>
+                    <div class="value">约 41 MB</div>
+                </div>
+                <div class="info-item">
+                    <div class="label">CPU架构</div>
+                    <div class="value">ARM32 / ARM64 / Universal</div>
+                </div>
+                <div class="info-item">
+                    <div class="label">开发语言</div>
+                    <div class="value">Kotlin</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="tech-stack">
+            <h2>技术栈</h2>
+            <div class="tech-grid">
+                <div class="tech-item">
+                    <div class="tech-name">原生 Android 开发</div>
+                    <div class="tech-desc">Kotlin 语言，纯原生开发</div>
+                </div>
+                <div class="tech-item">
+                    <div class="tech-name">Jetpack Compose</div>
+                    <div class="tech-desc">现代声明式 UI 框架</div>
+                </div>
+                <div class="tech-item">
+                    <div class="tech-name">Material 3</div>
+                    <div class="tech-desc">Material You 设计风格</div>
+                </div>
+                <div class="tech-item">
+                    <div class="tech-name">WebView</div>
+                    <div class="tech-desc">系统 WebView 内核</div>
+                </div>
+                <div class="tech-item">
+                    <div class="tech-name">SharedPreferences</div>
+                    <div class="tech-desc">轻量级数据存储</div>
+                </div>
+                <div class="tech-item">
+                    <div class="tech-name">DownloadManager</div>
+                    <div class="tech-desc">系统下载管理器</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="category">
+            <h2>浏览核心功能 <span class="feature-count">15</span></h2>
+            <ul class="feature-list">
+                <li>WebView 网页浏览（HTTP/HTTPS）</li>
+                <li>地址栏 + 搜索栏合一</li>
+                <li>前进/后退/刷新/停止</li>
+                <li>加载进度条显示</li>
+                <li>全屏浏览模式</li>
+                <li>JavaScript 支持</li>
+                <li>DOM 存储支持</li>
+                <li>数据库存储支持</li>
+                <li>缩放支持（内置缩放控件）</li>
+                <li>概览模式加载</li>
+                <li>宽视口支持</li>
+                <li>混合内容允许</li>
+                <li>硬件加速</li>
+                <li>文件访问支持</li>
+                <li>媒体自动播放（无需用户手势）</li>
+            </ul>
+        </div>
+
+        <div class="category">
+            <h2>搜索功能 <span class="feature-count">6</span></h2>
+            <ul class="feature-list">
+                <li>默认百度搜索</li>
+                <li>地址栏输入关键词自动搜索</li>
+                <li>搜索引擎切换（百度/Google/必应/搜狗/360）</li>
+                <li>URL 自动识别</li>
+                <li>搜索历史记录</li>
+                <li>搜索建议（预留）</li>
+            </ul>
+        </div>
+
+        <div class="category">
+            <h2>书签功能 <span class="feature-count">6</span></h2>
+            <ul class="feature-list">
+                <li>添加书签</li>
+                <li>删除书签</li>
+                <li>书签列表显示</li>
+                <li>点击书签打开网页</li>
+                <li>书签状态检测</li>
+                <li>本地持久化存储</li>
+            </ul>
+        </div>
+
+        <div class="category">
+            <h2>历史记录功能 <span class="feature-count">6</span></h2>
+            <ul class="feature-list">
+                <li>自动记录浏览历史</li>
+                <li>历史记录列表显示</li>
+                <li>删除单条历史</li>
+                <li>清除所有历史（带确认对话框）</li>
+                <li>历史记录时间显示</li>
+                <li>最大历史记录数限制（500条）</li>
+            </ul>
+        </div>
+
+        <div class="category">
+            <h2>下载管理功能 <span class="feature-count">7</span></h2>
+            <ul class="feature-list">
+                <li>文件下载功能</li>
+                <li>使用系统 DownloadManager</li>
+                <li>下载通知</li>
+                <li>下载进度显示</li>
+                <li>打开系统下载管理器</li>
+                <li>下载状态查询</li>
+                <li>下载取消支持</li>
+            </ul>
+        </div>
+
+        <div class="category">
+            <h2>设置功能 <span class="feature-count">10</span></h2>
+            <ul class="feature-list">
+                <li>搜索引擎设置（5种搜索引擎可选）</li>
+                <li>主题设置（浅色/深色/跟随系统）</li>
+                <li>字体大小设置（4档可调）</li>
+                <li>隐私设置入口</li>
+                <li>关于页面</li>
+                <li>设置本地持久化存储</li>
+                <li>设置项图标显示</li>
+                <li>设置项描述显示</li>
+                <li>选择对话框交互</li>
+                <li>设置实时生效</li>
+            </ul>
+        </div>
+
+        <div class="category">
+            <h2>开发者工具 <span class="feature-count">4</span></h2>
+            <ul class="feature-list">
+                <li>查看网页源码</li>
+                <li>等宽字体显示</li>
+                <li>滚动查看源码</li>
+                <li>源码加载状态提示</li>
+            </ul>
+        </div>
+
+        <div class="category">
+            <h2>安全与证书功能 <span class="feature-count">6</span></h2>
+            <ul class="feature-list">
+                <li>网站安全状态显示（安全/不安全）</li>
+                <li>安全评级（A/C级）</li>
+                <li>证书信息展示</li>
+                <li>安全建议</li>
+                <li>点击地址栏锁图标打开</li>
+                <li>HTTPS/HTTP 自动识别</li>
+            </ul>
+        </div>
+
+        <div class="category">
+            <h2>分享功能 <span class="feature-count">4</span></h2>
+            <ul class="feature-list">
+                <li>调用系统分享</li>
+                <li>分享网页标题</li>
+                <li>分享网页URL</li>
+                <li>分享选择器</li>
+            </ul>
+        </div>
+
+        <div class="category">
+            <h2>页面内查找功能 <span class="feature-count">6</span></h2>
+            <ul class="feature-list">
+                <li>页面内文字搜索</li>
+                <li>上一个匹配</li>
+                <li>下一个匹配</li>
+                <li>查找栏UI</li>
+                <li>实时查找高亮</li>
+                <li>关闭查找栏</li>
+            </ul>
+        </div>
+
+        <div class="category">
+            <h2>无痕浏览模式 <span class="feature-count">5</span></h2>
+            <ul class="feature-list">
+                <li>无痕模式切换</li>
+                <li>无痕模式下不记录历史</li>
+                <li>无痕模式指示器（顶部横幅）</li>
+                <li>进入无痕模式清除历史状态</li>
+                <li>菜单快速切换</li>
+            </ul>
+        </div>
+
+        <div class="category">
+            <h2>桌面/移动模式 <span class="feature-count">5</span></h2>
+            <ul class="feature-list">
+                <li>桌面版页面切换</li>
+                <li>移动版页面切换</li>
+                <li>User-Agent 切换</li>
+                <li>宽视口模式切换</li>
+                <li>概览模式切换</li>
+            </ul>
+        </div>
+
+        <div class="category">
+            <h2>隐私清除功能 <span class="feature-count">4</span></h2>
+            <ul class="feature-list">
+                <li>清除网页缓存</li>
+                <li>清除所有 Cookie</li>
+                <li>菜单快速清除</li>
+                <li>清除后自动生效</li>
+            </ul>
+        </div>
+
+        <div class="category">
+            <h2>UI/UX 设计 <span class="feature-count">12</span></h2>
+            <ul class="feature-list">
+                <li>Material 3 设计风格</li>
+                <li>底部导航栏（首页、书签、历史、下载、设置）</li>
+                <li>顶部菜单（12+ 菜单项）</li>
+                <li>加载进度条</li>
+                <li>深色/浅色主题（跟随系统）</li>
+                <li>流畅动画过渡</li>
+                <li>响应式布局</li>
+                <li>空状态提示</li>
+                <li>确认对话框</li>
+                <li>图标统一风格</li>
+                <li>字体排版规范</li>
+                <li>色彩系统规范</li>
+            </ul>
+        </div>
+
+        <div class="category">
+            <h2>系统集成 <span class="feature-count">8</span></h2>
+            <ul class="feature-list">
+                <li>系统分享集成</li>
+                <li>系统下载管理器集成</li>
+                <li>系统通知集成</li>
+                <li>系统浏览器 Intent 支持</li>
+                <li>分享 Intent 支持</li>
+                <li>网络安全配置</li>
+                <li>文件提供者配置</li>
+                <li>备份规则配置</li>
+            </ul>
+        </div>
+
+        <div class="category">
+            <h2>权限支持 <span class="feature-count">8</span></h2>
+            <ul class="feature-list">
+                <li>网络权限</li>
+                <li>存储权限</li>
+                <li>位置权限</li>
+                <li>相机权限</li>
+                <li>麦克风权限</li>
+                <li>通知权限</li>
+                <li>网络状态权限</li>
+                <li>Wi-Fi 状态权限</li>
+            </ul>
+        </div>
+
+        <footer>
+            <p>初眠浏览器 v1.0.0 | 基于原生 Android Kotlin 开发</p>
+            <p>GitHub: https://github.com/chumianyiru/chumian-browser</p>
+        </footer>
+    </div>
+</body>
+</html>

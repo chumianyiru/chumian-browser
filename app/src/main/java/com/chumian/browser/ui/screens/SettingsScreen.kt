@@ -104,7 +104,7 @@ fun SettingsScreen(
                 Column {
                     listOf(
                         "baidu" to "百度",
-                        "google" to "Google",
+                        "google" to "谷歌",
                         "bing" to "必应",
                         "sogou" to "搜狗",
                         "360" to "360搜索"
