@@ -20,6 +20,7 @@ import androidx.compose.ui.viewinterop.AndroidView
 import com.chumian.browser.ui.screens.BookmarksScreen
 import com.chumian.browser.ui.screens.DownloadsScreen
 import com.chumian.browser.ui.screens.HistoryScreen
+import com.chumian.browser.ui.screens.SettingsScreen
 import com.chumian.browser.ui.theme.ChumianBrowserTheme
 
 class MainActivity : ComponentActivity() {
@@ -268,6 +269,10 @@ fun BrowserScreen() {
             )
         } else if (currentScreen is Screen.Downloads) {
             DownloadsScreen(
+                onBack = { currentScreen = Screen.Browser }
+            )
+        } else if (currentScreen is Screen.Settings) {
+            SettingsScreen(
                 onBack = { currentScreen = Screen.Browser }
             )
         }
